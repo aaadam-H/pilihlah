@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no" />
+<title>PilihLah</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<main class="app">
+
+  <!-- SCREEN 1: INPUT -->
+  <section id="screen-input" class="screen">
+    <div class="wrap">
+      <h1 class="logo"><span class="logo-a">PILIH</span><span class="logo-b">LAH!</span></h1>
+      <p class="tagline">Bila korang confuse nak pilih apa, biar kitorang pilihkan!</p>
+
+      <div id="options-list" class="options-list"><!-- option rows injected by app.js --></div>
+
+      <button id="btn-add" class="chip-locked" type="button" disabled>
+        <svg class="lock-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 10V8a6 6 0 1 1 12 0v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <rect x="4" y="10" width="16" height="10" rx="3" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        Tambah pilihan (Premium — coming soon)
+      </button>
+
+      <p id="error-msg" class="error-msg" hidden>Isi dulu dua-dua pilihan tu!</p>
+
+      <button id="btn-pilih" class="btn-primary" type="button">PILIH!</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 2: DECIDING -->
+  <section id="screen-deciding" class="screen">
+    <div class="wrap centered">
+      <p class="subtitle">Tengah fikir…</p>
+      <div class="result-card gradient-purple-pink">
+        <p id="shuffle-text" class="shuffle-text">…</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 3: RESULT -->
+  <section id="screen-result" class="screen">
+    <div class="wrap centered">
+      <p class="emoji">🎉</p>
+      <p class="subtitle">Jawapannya…</p>
+      <div class="result-card gradient-purple-teal">
+        <p id="winner-text" class="winner-text"></p>
+      </div>
+      <button id="btn-again" class="btn-primary" type="button">Pilih Lagi</button>
+      <button id="btn-reset" class="btn-text" type="button">Reset &amp; pilihan baru</button>
+    </div>
+  </section>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

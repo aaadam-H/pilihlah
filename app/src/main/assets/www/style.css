@@ -1,0 +1,298 @@
+:root {
+  --bg: #0D0D12;
+  --surface: #17171F;
+  --surface-alt: #1F1F2B;
+  --purple: #8B5CF6;
+  --purple-deep: #6D28D9;
+  --pink: #FF2E93;
+  --teal: #2EE6D0;
+  --text: #F5F5FA;
+  --text-secondary: #A0A0B2;
+  --error: #FF5C7A;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button {
+  font-family: inherit;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+.app {
+  position: relative;
+  min-height: 100%;
+  width: 100%;
+}
+
+/* Screens are stacked, not laid out side by side — only one is ever
+   visible. We use a dedicated .active class instead of just the `hidden`
+   attribute, because `hidden` can be silently overridden by an author
+   `display` rule of equal-or-higher priority, which is exactly the bug
+   this replaced (all 3 screens rendering as 3 flex columns at once). */
+.screen {
+  display: none;
+  width: 100%;
+  min-height: 100vh;
+  justify-content: center;
+}
+
+.screen.active {
+  display: flex;
+  animation: screen-in 0.22s ease both;
+}
+
+@keyframes screen-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.wrap {
+  width: 100%;
+  max-width: 440px;
+  padding: calc(40px + var(--safe-top)) 24px calc(32px + var(--safe-bottom));
+  display: flex;
+  flex-direction: column;
+}
+
+.wrap.centered {
+  justify-content: center;
+  text-align: center;
+  align-items: stretch;
+}
+
+/* ---------- Logo / heading ---------- */
+
+.logo {
+  margin: 8px 0 0;
+  font-size: 44px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+.logo-a { color: var(--purple); display: block; }
+.logo-b { color: var(--pink); display: block; margin-top: -6px; }
+
+.tagline {
+  margin: 14px 0 32px;
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 20px;
+}
+
+.emoji {
+  font-size: 52px;
+  margin: 0 0 4px;
+}
+
+/* ---------- Option inputs ---------- */
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.option-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.option-field {
+  flex: 1;
+  position: relative;
+}
+
+.option-field label {
+  position: absolute;
+  top: -9px;
+  left: 12px;
+  padding: 0 6px;
+  background: var(--bg);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.option-field input {
+  width: 100%;
+  background: var(--surface);
+  border: 1.5px solid var(--surface-alt);
+  border-radius: 14px;
+  padding: 16px 14px;
+  font-size: 16px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.option-field input::placeholder {
+  color: #5c5c6b;
+}
+
+.option-field input:focus {
+  border-color: var(--purple);
+}
+
+.option-field.has-error input {
+  border-color: var(--error);
+}
+
+.btn-remove {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: none;
+  background: none;
+  color: var(--text-secondary);
+  font-size: 20px;
+  border-radius: 50%;
+}
+
+.btn-remove:active {
+  background: var(--surface-alt);
+}
+
+/* ---------- Locked "add option" chip ---------- */
+
+.chip-locked {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  border: none;
+  border-radius: 16px;
+  padding: 14px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.lock-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* ---------- Error ---------- */
+
+.error-msg {
+  color: var(--error);
+  font-size: 14px;
+  font-weight: 600;
+  margin: 14px 2px 0;
+}
+
+/* ---------- Buttons ---------- */
+
+.btn-primary {
+  margin-top: 28px;
+  border: none;
+  border-radius: 999px;
+  padding: 18px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #fff;
+  background: linear-gradient(90deg, var(--purple), var(--pink));
+}
+
+.btn-primary:active {
+  filter: brightness(0.92);
+}
+
+.btn-text {
+  margin-top: 14px;
+  border: none;
+  background: none;
+  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 10px;
+}
+
+/* ---------- Deciding / Result cards ---------- */
+
+.result-card {
+  border-radius: 24px;
+  padding: 44px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+}
+
+.gradient-purple-pink {
+  background: linear-gradient(135deg, var(--purple-deep), var(--pink));
+}
+
+.gradient-purple-teal {
+  background: linear-gradient(135deg, var(--purple), var(--teal));
+}
+
+.shuffle-text {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  color: #fff;
+  text-align: center;
+  word-break: break-word;
+}
+
+.winner-text {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 900;
+  color: #fff;
+  text-align: center;
+  word-break: break-word;
+  line-height: 1.15;
+}
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 340px) {
+  .logo { font-size: 38px; }
+  .winner-text { font-size: 28px; }
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
