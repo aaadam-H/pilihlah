@@ -1,52 +1,35 @@
-# PilihLah (versi Web/HTML dalam WebView)
+# PilihLah (PWA)
 
-Sama app, cara lain nak build dia: satu WebView native yang load HTML/CSS/JS
-yang dibundle terus dalam APK (`app/src/main/assets/www/`). 100% offline —
-takde permission INTERNET pun dalam manifest.
+Satu folder ni = keseluruhan app. Tak perlu build step, tak perlu npm.
 
-## Kenapa pendekatan ni (berbanding versi native Kotlin/Compose)
-- Semua UI/logic dalam plain HTML/CSS/JS — senang edit/preview terus dalam
-  browser (buka `app/src/main/assets/www/index.html` terus, tak payah
-  Android Studio pun untuk ubah tampilan).
-- MainActivity.kt cuma ~30 baris — cuma "shell" yang bukak WebView.
-- Sesuai untuk app tanpa backend/native API macam PilihLah ni.
+## Letak di server
+1. Upload **semua** kandungan folder ni ke root website (cth `public_html/`),
+   atau ke subfolder (cth `public_html/pilihlah/`) — dua-dua jalan.
+2. **PENTING:** pastikan fail tersembunyi (dot-files) turut ke-upload:
+   `.well-known/` dan `.htaccess`. Sesetengah FTP client / drag-drop
+   abaikan fail bermula titik. Tick "show hidden files".
+3. Website mesti **HTTPS** (service worker & Play Store wajibkan).
+4. Buka `https://domain-korang/` — sepatutnya dah boleh "Install app" dari Chrome.
 
-## Buka dalam Android Studio
-1. File → Open → pilih folder `PilihLahWeb` ni.
-2. Biar Gradle sync.
-3. Run ▶ pada emulator/phone.
+## Apa dalam folder
+| Fail | Fungsi |
+|---|---|
+| `index.html`, `style.css`, `app.js` | App |
+| `sw.js` | Service worker (offline). Tukar `VERSION` dalam fail ni bila deploy update besar |
+| `site.webmanifest` | Manifest PWA (nama, warna, icon, screenshot) |
+| `icons/`, `favicon.ico` | Semua icon |
+| `screenshots/` | Screenshot untuk install prompt |
+| `.well-known/assetlinks.json` | **Template** — wajib diisi sebelum publish ke Play Store |
+| `.htaccess` / `_headers` | Config Apache / Netlify+Cloudflare |
+| `android-build/` | Panduan + aset untuk dev yang nak buat .apk/.aab (boleh dipadam dari server, tak diperlukan untuk web) |
 
-Atau, untuk preview cepat UI je (tanpa Android Studio), terus buka
-`app/src/main/assets/www/index.html` dalam browser desktop — app tu jalan
-sama macam dalam app (shuffle animation, dsb), sebab semuanya vanilla
-JS/CSS, takde dependency Android.
+## Nak jadikan app Play Store (.apk/.aab)
+Baca `android-build/README-ANDROID.md`.
 
-## Struktur logic (untuk scale ke banyak pilihan + paywall nanti)
-Semua dalam `app/src/main/assets/www/app.js`:
-- `state.options` — array pilihan (bukan fields tetap A/B), so tambah
-  pilihan = tambah dalam array, semua fungsi lain dah loop atas array ni.
-- `MAX_FREE_OPTIONS = 2` — satu-satunya line untuk tukar bila nak buka slot.
-- `canAddOption()` — sini nanti sambung logic billing/entitlement.
-- Butang "+ Tambah pilihan" dalam UI sekarang locked (🔒), sama macam versi
-  native, sebagai placeholder untuk paywall.
+## Test lokal
+`python3 -m http.server 8000` dalam folder ni, buka `http://localhost:8000`.
+(Service worker jalan atas localhost; tak jalan atas `file://`.)
 
-## Applicationid berbeza dari versi native
-Package name app ni `com.pilihlah.webapp` (versi native guna
-`com.pilihlah.app`) — sengaja dibezakan supaya boleh install DUA-DUA
-versi sekali gus dalam satu phone untuk banding-banding. Bila dah decide
-nak guna yang mana untuk publish, tukar `applicationId` dalam
-`app/build.gradle.kts` ikut citarasa korang.
-
-## Nak publish ke Play Store
-Sama step macam versi native:
-1. Build → Generate Signed Bundle / APK → **Android App Bundle (.aab)**.
-2. Buat/guna keystore, simpan elok-elok.
-3. Upload `.aab` ke Google Play Console.
-
-## Nota teknikal
-- `noCompress` untuk html/css/js di-set dalam `build.gradle.kts` supaya
-  WebView load asset dengan stabil pada semua device.
-- `allowFileAccess = true` diperlukan sebab kita load dari
-  `file:///android_asset/`.
-- Tiada `INTERNET` permission dalam manifest — memang sengaja, sebab app
-  ni tak call mana-mana server.
+## Paywall (masa depan)
+Logic dalam `app.js`: `MAX_FREE_OPTIONS`, `canAddOption()`. Butang "+ Tambah pilihan"
+masih locked.
